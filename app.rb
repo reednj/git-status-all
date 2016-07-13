@@ -40,9 +40,10 @@ class App
 			b = g.branches[:master]
 			
 			s = ''
-			s += "#{b.ahead_count} ahead" if b.ahead_count > 0
-			s += ' / '  if b.ahead_count > 0 && b.behind_count > 0
 			s += "#{b.behind_count} behind" if b.behind_count > 0
+			s += ' / '  if b.ahead_count > 0 && b.behind_count > 0
+			s += "#{b.ahead_count} ahead" if b.ahead_count > 0
+
 			return s.black.on_yellow
 		end
 
@@ -79,7 +80,7 @@ module Git
 
 	class Branch
 		def up_to_date?
-			ahead.count == 0 && behind.count == 0
+			ahead_count == 0 && behind_count == 0
 		end
 
 		def ahead
