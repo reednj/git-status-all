@@ -13,8 +13,8 @@ class App
 			s = file_status(g)
 			r = remote_status(g)
 
-			s = "(#{s})" unless s.empty?
-			puts "#{p[:name]} #{s}".right_align("#{r}")
+			s = " #{s} ".black.on_yellow unless s.empty?
+			puts "#{p[:name]}".pad_to_col(24).append(s).right_align("#{r}")
 		end
 	
 	end
@@ -47,7 +47,7 @@ class App
 			return s.black.on_yellow
 		end
 
-		return "ok".green.on_black
+		return 'ok'.green.on_black
 	end
 
 	def term_width
@@ -56,7 +56,18 @@ class App
 
 end
 
+
 class String
+	def append(s)
+		self + s
+	end
+
+	def pad_to_col(n)
+		pad_amount = n - self.uncolorize.length
+		return " " + s if pad_amount < 0
+		return self + (" " * pad_amount)
+	end
+
 	def right_align(s)
 		pad_amount = self._term_width - self.uncolorize.length - s.uncolorize.length
 		return " " + s if pad_amount < 0
