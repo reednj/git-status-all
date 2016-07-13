@@ -44,7 +44,7 @@ class App
 			s += ' / '  if b.ahead_count > 0 && b.behind_count > 0
 			s += "#{b.ahead_count} ahead" if b.ahead_count > 0
 
-			return s.black.on_yellow
+			return s.black.on_green
 		end
 
 		return 'ok'.green.on_black
