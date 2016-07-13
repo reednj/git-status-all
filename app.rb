@@ -14,8 +14,7 @@ class App
 			r = remote_status(g)
 
 			s = "(#{s})" unless s.empty?
-
-			puts "#{p[:name]} #{s}".right_align("[#{r}]") 
+			puts "#{p[:name]} #{s}".right_align("#{r}")
 		end
 	
 	end
@@ -30,24 +29,35 @@ class App
 
 	def remote_status(g)
 		if g.remotes.empty?
-			return "no remotes"
+			return "no remotes".black.on_red
 		end
 
 		if g.remotes.select{|r| r.name.downcase == 'origin' }.empty?
-			return "no origin"
+			return "no origin".black.on_yellow
 		end
 
-		return "ok"
+		if !g.branches[:master].up_to_date?
+			b = g.branches[:master]
+			
+			s = ''
+			s += "#{b.ahead_count} ahead" if b.ahead_count > 0
+			s += ' / '  if b.ahead_count > 0 && b.behind_count > 0
+			s += "#{b.behind_count} behind" if b.behind_count > 0
+			return s.black.on_yellow
+		end
+
+		return "ok".green.on_black
 	end
 
 	def term_width
 		@term_width ||= `tput cols`.to_i
 	end
+
 end
 
 class String
 	def right_align(s)
-		pad_amount = self._term_width - self.length - s.length
+		pad_amount = self._term_width - self.uncolorize.length - s.uncolorize.length
 		return " " + s if pad_amount < 0
 		return self + (" " * pad_amount) + s
 	end
@@ -64,6 +74,38 @@ module Git
 			return true
 		rescue
 			return false
+		end
+	end
+
+	class Branch
+		def up_to_date?
+			ahead.count == 0 && behind.count == 0
+		end
+
+		def ahead
+			origin = self.remotes(:origin)
+			return [] if origin.nil?
+			@base.log.between(origin.full, self.name)
+		end
+
+		def behind
+			origin = self.remotes(:origin)
+			return [] if origin.nil?
+			@base.log.between(self.name, origin.full)
+		end
+
+		def ahead_count
+			@ahead_count ||= ahead.count
+		end
+
+		def behind_count
+			@behind_count ||= behind.count
+		end
+
+		def remotes(remote_name = nil)
+			result = @base.branches.remote.select{|b| b.name == self.name }
+			return result.select{|b| b.full.include? remote_name.to_s }.first unless remote_name.nil?
+			return result 
 		end
 	end
 end
