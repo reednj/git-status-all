@@ -14,7 +14,8 @@ class App
 			r = remote_status(g)
 
 			s = " #{s} ".black.on_yellow unless s.empty?
-			puts "#{p[:name]}".pad_to_col(24).append(s).right_align("#{r} [#{g.branch.to_s.blue}]")
+			n = s.empty? ? p[:name] : p[:name].yellow 
+			puts "#{n}".pad_to_col(24).append(s).right_align("#{r} [#{g.branch.to_s.blue}]")
 		end
 	
 	end
@@ -44,7 +45,7 @@ class App
 			s += ' / '  if b.ahead_count > 0 && b.behind_count > 0
 			s += "#{b.ahead_count}↑" if b.ahead_count > 0
 
-			return s.black.on_green
+			return s.green
 		end
 
 		return ''
