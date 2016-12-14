@@ -10,6 +10,11 @@ module Git
   module StatusAll
 	class App
 		def main
+			# we want to disable the text coloring if we are printing to a
+			# file, or on a platform (like windows) that likely doesn't support
+			# the colors
+			String.disable_colorization = !$stdout.isatty
+			
 			opts = Trollop::options do
 				version "git-status-all #{Git::StatusAll::VERSION} (c) 2016 @reednj (reednj@gmail.com)"
 				banner "Usage: git-status-all [options] [path]"
@@ -26,7 +31,7 @@ module Git
 				g = Git.open p[:path]
 
 				if opts[:fetch]
-					print "#{name}".right_align("[#{"fetching...".blue}]") + "\r"
+					print "#{name}".right_align("[#{"fetching...".yellow}]") + "\r"
 					g.fetch
 				end
 
