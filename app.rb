@@ -1,5 +1,5 @@
-require 'bundler'
-Bundler.require
+require 'git'
+require 'colorize'
 
 class App
 	def main
@@ -14,7 +14,7 @@ class App
 			r = remote_status(g)
 
 			s = " #{s} ".black.on_yellow unless s.empty?
-			puts "#{p[:name]}".pad_to_col(24).append(s).right_align("#{r}")
+			puts "#{p[:name]}".pad_to_col(24).append(s).right_align("#{r} [#{g.branch.to_s.blue}]")
 		end
 	
 	end
@@ -40,14 +40,14 @@ class App
 			b = g.branches[:master]
 			
 			s = ''
-			s += "#{b.behind_count} behind" if b.behind_count > 0
+			s += "#{b.behind_count}↓" if b.behind_count > 0
 			s += ' / '  if b.ahead_count > 0 && b.behind_count > 0
-			s += "#{b.ahead_count} ahead" if b.ahead_count > 0
+			s += "#{b.ahead_count}↑" if b.ahead_count > 0
 
 			return s.black.on_green
 		end
 
-		return 'ok'.green.on_black
+		return ''
 	end
 
 	def term_width
@@ -121,5 +121,3 @@ module Git
 		end
 	end
 end
-
-App.new.main
