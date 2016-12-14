@@ -1,5 +1,6 @@
 require 'git'
 require 'colorize'
+require 'trollop'
 
 require "git/status_all/version"
 require "git/status_all/extensions"
@@ -9,7 +10,12 @@ module Git
   module StatusAll
 	class App
 		def main
-			dev_dir = '.'
+			opts = Trollop::options do
+				version "git-status-all #{Git::StatusAll::VERSION} (c) 2016 @reednj (reednj@gmail.com)"
+				banner "Usage: git-status-all [options] [path]"
+			end
+
+			dev_dir = ARGV.last || '.'
 			repo_paths = Dir.entries(dev_dir).
 				map {|p| { :name => p, :path => File.expand_path(p, dev_dir) } }.
 				select { |p| Git.repo? p[:path] }
