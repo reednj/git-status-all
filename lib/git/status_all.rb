@@ -9,7 +9,7 @@ module Git
   module StatusAll
 	class App
 		def main
-			dev_dir = '/Users/reednj/Documents/dev/'
+			dev_dir = '.'
 			repo_paths = Dir.entries(dev_dir).
 				map {|p| { :name => p, :path => File.expand_path(p, dev_dir) } }.
 				select { |p| Git.repo? p[:path] }
