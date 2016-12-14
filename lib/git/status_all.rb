@@ -67,7 +67,6 @@ module Git
 				
 				s = ''
 				s += "#{b.behind_count}\u2193" if b.behind_count > 0
-				s += ' / '  if b.ahead_count > 0 && b.behind_count > 0
 				s += "#{b.ahead_count}\u2191" if b.ahead_count > 0
 
 				return s.green
