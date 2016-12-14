@@ -13,6 +13,7 @@ module Git
 			opts = Trollop::options do
 				version "git-status-all #{Git::StatusAll::VERSION} (c) 2016 @reednj (reednj@gmail.com)"
 				banner "Usage: git-status-all [options] [path]"
+				opt :fetch, "perform fetch for each repository before getting status", :default => false
 			end
 
 			dev_dir = ARGV.last || '.'
@@ -21,12 +22,18 @@ module Git
 				select { |p| Git.repo? p[:path] }
 			
 			repo_paths.each do |p|
+				name = p[:name]
 				g = Git.open p[:path]
+
+				if opts[:fetch]
+					print "#{name}".right_align("[#{"fetching...".blue}]") + "\r"
+					g.fetch
+				end
+
 				s = file_status(g)
 				r = remote_status(g)
-
 				s = " #{s} ".black.on_yellow unless s.empty?
-				n = s.empty? ? p[:name] : p[:name].yellow 
+				n = s.empty? ? name : name.yellow 
 				puts "#{n}".pad_to_col(24).append(s).right_align("#{r} [#{g.branch.to_s.blue}]")
 			end
 		
