@@ -8,7 +8,17 @@ module Git
 		end
 	end
 
+	class Branches
+		def current
+			select{ |b| b.current? }.first
+		end
+	end
+
 	class Branch
+		def current?
+			current	
+		end
+
 		def up_to_date?
 			ahead_count == 0 && behind_count == 0
 		end

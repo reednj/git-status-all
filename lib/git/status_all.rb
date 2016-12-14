@@ -39,7 +39,7 @@ module Git
 				r = remote_status(g)
 				s = " #{s} ".black.on_yellow unless s.empty?
 				n = s.empty? ? name : name.yellow 
-				puts "#{n}".pad_to_col(24).append(s).right_align("#{r} [#{g.branch.to_s.blue}]")
+				puts "#{n}".pad_to_col(24).append(s).right_align("#{r} [#{g.branches.current.to_s.blue}]")
 			end
 		
 		end
