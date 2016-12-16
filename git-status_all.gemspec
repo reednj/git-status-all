@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'git/status_all/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "git-status_all"
+  spec.name          = "git-status-all"
   spec.version       = Git::StatusAll::VERSION
   spec.authors       = ["Nathan Reed"]
   spec.email         = ["reednj@gmail.com"]
 
-  spec.summary       = %q{get the status of all git repositories in a directory}
-  spec.homepage      = "https://github.com/reednj/git-status_all"
+  spec.summary       = %q{show the status of all the git repositories in a directory}
+  spec.homepage      = "https://github.com/reednj/git-status-all"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
