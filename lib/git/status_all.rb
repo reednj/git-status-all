@@ -28,18 +28,28 @@ module Git
 			
 			repo_paths.each do |p|
 				name = p[:name]
-				g = Git.open p[:path]
+				
+				begin
+					g = Git.open p[:path]
+					if opts[:fetch]
+						print "#{name}".right_align("[#{"fetching...".yellow}]") + "\r"
+						g.fetch
+					end
 
-				if opts[:fetch]
-					print "#{name}".right_align("[#{"fetching...".yellow}]") + "\r"
-					g.fetch
+					s = file_status(g)
+					r = remote_status(g)
+					s = " #{s} ".black.on_yellow unless s.empty?
+					n = s.empty? ? name : name.yellow 
+					puts "#{n}".pad_to_col(24).append(s).right_align("#{r} [#{g.branches.current.to_s.blue}]")
+				rescue => e
+					if e.to_s.include? "ambiguous argument 'HEAD'"
+						err ='ERROR: NO HEAD'
+					else
+						err ='ERROR'
+					end
+
+					puts "#{name}".right_align("[#{err}]".red)	
 				end
-
-				s = file_status(g)
-				r = remote_status(g)
-				s = " #{s} ".black.on_yellow unless s.empty?
-				n = s.empty? ? name : name.yellow 
-				puts "#{n}".pad_to_col(24).append(s).right_align("#{r} [#{g.branches.current.to_s.blue}]")
 			end
 		
 		end
