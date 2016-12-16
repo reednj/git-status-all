@@ -54,7 +54,7 @@ module Git
 					end
 
 					puts "#{name}".right_align("[#{err}]".red)	
-					puts e.to_s
+					puts e.to_s if err == 'ERROR'
 				end
 			end
 		
