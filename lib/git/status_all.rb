@@ -31,9 +31,14 @@ module Git
 				
 				begin
 					g = Git.open p[:path]
+					
 					if opts[:fetch]
 						print "#{name}".right_align("[#{"fetching...".yellow}]") + "\r"
-						g.fetch
+						
+						if !g.remotes.empty?
+							remote = g.remotes.select{|r| r.name.downcase == 'origin' }.first || g.remotes.first
+							g.fetch remote
+						end
 					end
 
 					s = file_status(g)
@@ -49,6 +54,7 @@ module Git
 					end
 
 					puts "#{name}".right_align("[#{err}]".red)	
+					puts e.to_s
 				end
 			end
 		
