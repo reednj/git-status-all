@@ -2,7 +2,7 @@
 
 ## Installation
 
-    $ gem install git-status_all
+    $ gem install git-status-all
 
 ## Usage
 
