@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    git-status-all (1.1.0)
+    git-status-all (1.1.2)
       colorize
       git (~> 1.3)
       trollop
@@ -23,4 +23,4 @@ DEPENDENCIES
   rake (~> 10.0)
 
 BUNDLED WITH
-   1.12.5
+   1.13.6
