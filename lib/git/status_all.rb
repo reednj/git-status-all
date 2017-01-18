@@ -21,11 +21,17 @@ module Git
 				opt :fetch, "perform fetch for each repository before getting status", :default => false
 			end
 
-			dev_dir = ARGV.last || '.'
-			repo_paths = Dir.entries(dev_dir).
-				map {|p| { :name => p, :path => File.expand_path(p, dev_dir) } }.
-				select { |p| Git.repo? p[:path] }
-			
+			repo_paths = []
+
+			begin
+				dev_dir = ARGV.last || '.'
+				repo_paths = Dir.entries(dev_dir).
+					map {|p| { :name => p, :path => File.expand_path(p, dev_dir) } }.
+					select { |p| Git.repo? p[:path] }
+			rescue => e
+				$stderr.puts "Could not read repositories in '#{dev_dir}': #{e}"
+			end
+
 			repo_paths.each do |p|
 				name = p[:name]
 				
