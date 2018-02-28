@@ -84,8 +84,8 @@ module Git
 				return "no origin".black.on_yellow
 			end
 
-			if !g.branches[:master].up_to_date?
-				b = g.branches[:master]
+			if !g.branches.current.up_to_date?
+				b = g.branches.current
 				
 				s = ''
 				s += "#{b.behind_count}\u2193" if b.behind_count > 0
