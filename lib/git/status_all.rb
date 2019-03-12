@@ -1,6 +1,6 @@
 require 'git'
 require 'colorize'
-require 'trollop'
+require 'optimist'
 
 require "git/status_all/version"
 require "git/status_all/extensions"
@@ -15,7 +15,7 @@ module Git
 			# the colors
 			String.disable_colorization = !$stdout.isatty
 			
-			opts = Trollop::options do
+			opts = Optimist::options do
 				version "git-status-all #{Git::StatusAll::VERSION} (c) 2016 @reednj (reednj@gmail.com)"
 				banner "Usage: git-status-all [options] [path]"
 				opt :fetch, "perform fetch for each repository before getting status", :default => false

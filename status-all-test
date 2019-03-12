@@ -1,2 +1,3 @@
 #!/bin/bash
-bundle exec exe/git-status-all "$@"
+# exec ruby avoids the "not executable" error in bundler on x64-mingw32
+bundle exec ruby exe/git-status-all "$@"
